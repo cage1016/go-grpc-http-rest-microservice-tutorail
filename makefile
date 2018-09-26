@@ -10,8 +10,8 @@ run-server: build-server
 	-grpc-port=9090 \
 	-http-port=8080 \
 	-db-host=127.0.0.1:3306 \
-	-db-user=root \
-	-db-password=@75dkYz9n \
+	-db-user=qeek \
+	-db-password=qnap1688 \
 	-db-schema=go-grpc-http-rest-microservice-tutorial \
 	-swagger-dir=api/swagger/v1 \
 	-log-level=-1 \
@@ -28,3 +28,9 @@ build-client-rest:
 
 run-client-rest: build-client-rest
 	./cmd/client-rest/client-rest -server=http://localhost:8080
+
+proto-gen:
+	./third_party/proto-gen.sh
+
+swagger-gen:
+	./third_party/swagger-gen.sh
