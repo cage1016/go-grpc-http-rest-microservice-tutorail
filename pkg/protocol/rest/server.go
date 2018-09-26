@@ -2,7 +2,6 @@ package rest
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -10,13 +9,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"github.com/elazarl/go-bindata-assetfs"
 
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/api/v1"
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/logger"
+	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/protocol/rest/middleware"
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/ui/data/swagger"
 )
 
@@ -35,7 +35,7 @@ func RunServer(ctx context.Context, grpcPort, httpPort, SwaggerDir string) error
 	mux.Handle("/", gwmux)
 	mux.HandleFunc("/swagger/", func(w http.ResponseWriter, r *http.Request) {
 		if !strings.HasSuffix(r.URL.Path, "swagger.json") {
-			log.Printf("Not Found: %s", r.URL.Path)
+			logger.Log.Fatal("fail to serve swagger.json", zap.String("Not Found:", r.URL.Path))
 			http.NotFound(w, r)
 			return
 		}
@@ -43,7 +43,7 @@ func RunServer(ctx context.Context, grpcPort, httpPort, SwaggerDir string) error
 		p := strings.TrimPrefix(r.URL.Path, "/swagger/")
 		p = path.Join(SwaggerDir, p)
 
-		log.Printf("Serving swagger-file: %s", p)
+		logger.Log.Info("Serving swagger-file:", zap.String(p, ""))
 
 		http.ServeFile(w, r, p)
 	})
@@ -51,7 +51,7 @@ func RunServer(ctx context.Context, grpcPort, httpPort, SwaggerDir string) error
 
 	srv := &http.Server{
 		Addr:    ":" + httpPort,
-		Handler: mux,
+		Handler: middleware.AddRequestID(middleware.AddLogger(logger.Log, mux)),
 	}
 
 	// graceful shutdown
