@@ -11,10 +11,12 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"github.com/elazarl/go-bindata-assetfs"
 
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/api/v1"
+	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/logger"
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/ui/data/swagger"
 )
 
@@ -26,7 +28,7 @@ func RunServer(ctx context.Context, grpcPort, httpPort, SwaggerDir string) error
 	gwmux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	if err := v1.RegisterToDoServiceHandlerFromEndpoint(ctx, gwmux, "localhost:"+grpcPort, opts); err != nil {
-		log.Fatalf("failed to start HTTP gateway: %v", err)
+		logger.Log.Fatal("failed to start HTTP gateway", zap.String("reason", err.Error()))
 	}
 
 	mux := http.NewServeMux()
@@ -66,7 +68,7 @@ func RunServer(ctx context.Context, grpcPort, httpPort, SwaggerDir string) error
 		_ = srv.Shutdown(ctx)
 	}()
 
-	log.Println("starting HTTP/REST gateway...")
+	logger.Log.Info("starting HTTP/REST gateway...")
 	return srv.ListenAndServe()
 }
 
