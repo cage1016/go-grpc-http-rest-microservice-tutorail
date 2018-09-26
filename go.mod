@@ -5,6 +5,7 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-sql-driver/mysql v1.4.0
 	github.com/golang/protobuf v1.2.0
+	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/grpc-gateway v1.5.0
 	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/philips/go-bindata-assetfs v0.0.0-20150624150248-3dcc96556217 // indirect

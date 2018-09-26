@@ -6,7 +6,16 @@ build-server:
 	cd cmd/server && $(GOBUILD) -o server
 
 run-server: build-server
-	./cmd/server/server -grpc-port=9090 -http-port=8080 -db-host=127.0.0.1:3306 -db-user=root -db-password=@75dkYz9n -db-schema=go-grpc-http-rest-microservice-tutorial -swagger-dir=api/swagger/v1
+	./cmd/server/server \
+	-grpc-port=9090 \
+	-http-port=8080 \
+	-db-host=127.0.0.1:3306 \
+	-db-user=root \
+	-db-password=@75dkYz9n \
+	-db-schema=go-grpc-http-rest-microservice-tutorial \
+	-swagger-dir=api/swagger/v1 \
+	-log-level=-1 \
+	-log-time-format=2006-01-02T15:04:05.999999999Z07:00
 
 build-client-grpc:
 	cd cmd/client-grpc/ && $(GOBUILD) -o client-grpc
