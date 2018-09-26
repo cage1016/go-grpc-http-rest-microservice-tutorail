@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/protocol/grpc"
+	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/protocol/rest"
 	"github.com/cage1016/go-grpc-http-rest-microservice-tutorial/pkg/service/v1"
 )
 
