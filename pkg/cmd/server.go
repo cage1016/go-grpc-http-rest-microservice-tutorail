@@ -24,6 +24,9 @@ type Config struct {
 	// HTTPPort is TCP port to listen by HTTP/REST gateway
 	HTTPPort string
 
+	// path to the directory which contains swagger definitions
+	SwaggerDir string
+
 	// DB Datastore parameters section
 	// DatastoreDBHost is host of database
 	DatastoreDBHost string
@@ -47,6 +50,7 @@ func RunServer() error {
 	flag.StringVar(&cfg.DatastoreDBUser, "db-user", "", "Database user")
 	flag.StringVar(&cfg.DatastoreDBPassword, "db-password", "", "Database password")
 	flag.StringVar(&cfg.DatastoreDBSchema, "db-schema", "", "Database schema")
+	flag.StringVar(&cfg.SwaggerDir, "swagger-dir", "proto", "path to the directory which contains swagger definitions")
 	flag.Parse()
 
 	if len(cfg.GRPCPort) == 0 {
@@ -77,7 +81,7 @@ func RunServer() error {
 
 	// run HTTP gateway
 	go func() {
-		_ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort)
+		_ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort, cfg.SwaggerDir)
 	}()
 
 	return grpc.RunServer(ctx, v1API, cfg.GRPCPort)
