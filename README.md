@@ -15,30 +15,16 @@
 $ git clone git@github.com:cage1016/go-grpc-http-rest-microservice-tutorail.git
 ```
 
-2. 預先建立 database
+2. database
 
 - database name: `go-grpc-http-rest-microservice-tutorial`
 - database user: `qeek`
 - database password: `qnap1688`
 
+建立 database
 
-建立帳號
-
-``` mysql
-mysql> GRANT ALL ON *.* TO 'qeek'@'localhost' IDENTIFIED BY 'qnap1688' WITH GRANT OPTION;
 ```
-
-建立 database table
-
-```sql
-CREATE TABLE `ToDo` (
-  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Title` varchar(200) DEFAULT NULL,
-  `Description` varchar(1024) DEFAULT NULL,
-  `Reminder` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `ID_UNIQUE` (`ID`)
-);
+$ docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=qnap1688 -e MYSQL_DATABASE=go-grpc-http-rest-microservice-tutorial -e MYSQL_USER=qeek -e MYSQL_PASSWORD=qnap1688 -v $(pwd)/configs:/docker-entrypoint-initdb.d -d mysql
 ```
 
 執行 server 
